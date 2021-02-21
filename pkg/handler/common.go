@@ -2,6 +2,7 @@ package handler
 
 import (
 	"flag"
+	"github.com/ycsk02/kubevision/pkg/clustermanager"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/kubernetes"
@@ -10,14 +11,13 @@ import (
 	"k8s.io/client-go/util/homedir"
 	"os"
 	"path/filepath"
-	"github.com/ycsk02/kubevision/pkg/clustermanager"
 )
 
 type ObjectClient struct {
-	restClient	rest.Interface
-	resource	*metav1.APIResource
-	gvk			schema.GroupVersionKind
-	ns			string
+	restClient rest.Interface
+	resource   *metav1.APIResource
+	gvk        schema.GroupVersionKind
+	ns         string
 }
 
 type Store struct {
@@ -26,9 +26,9 @@ type Store struct {
 
 func GetControllerClusterConfig() *rest.Config {
 	var (
-		config		*rest.Config
-		kubeconfig	*string
-		err			error
+		config     *rest.Config
+		kubeconfig *string
+		err        error
 	)
 	if _, inCluster := os.LookupEnv("KUBERNETES_SERVICE_HOST"); inCluster == true {
 		config, err = rest.InClusterConfig()
@@ -53,7 +53,7 @@ func GetControllerClusterConfig() *rest.Config {
 	return config
 }
 
-func GetKubeClient() *kubernetes.Clientset{
+func GetKubeClient() *kubernetes.Clientset {
 	config := GetControllerClusterConfig()
 	clientset, err := kubernetes.NewForConfig(config)
 	if err != nil {
@@ -62,7 +62,7 @@ func GetKubeClient() *kubernetes.Clientset{
 	return clientset
 }
 
-func GetManagerClusterClient() *clustermanager.ClusterManagerV1Client {
+func GetClusterManagerClient() *clustermanager.ClusterManagerV1Client {
 	config := GetControllerClusterConfig()
 	clientset, err := clustermanager.NewForConfig(config)
 	if err != nil {
@@ -70,6 +70,7 @@ func GetManagerClusterClient() *clustermanager.ClusterManagerV1Client {
 	}
 	return clientset
 }
+
 //
 // func NewStore() *Store{
 // 	return &Store{
@@ -79,5 +80,3 @@ func GetManagerClusterClient() *clustermanager.ClusterManagerV1Client {
 //
 // func (s *Store) GetWorkerClusterConfig(clusterName string) {
 // }
-
-

@@ -10,8 +10,8 @@ import (
 
 func main() {
 	clustermanager.AddToScheme(scheme.Scheme)
-	clientset := handler.GetManagerClusterClient()
-	kubeConfig, err := clientset.KubeConfig().Get("sukai-test60",  metav1.GetOptions{})
+	clientset := handler.GetClusterManagerClient()
+	kubeConfig, err := clientset.KubeConfig().Get("sukai-test60", metav1.GetOptions{})
 	if err != nil {
 		fmt.Println(err)
 		return
